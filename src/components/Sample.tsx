@@ -30,37 +30,37 @@ export default function Sample() {
           <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>회사명
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>담당자명
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>연락처
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>이메일
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>회사 홈페이지 또는 간략한 회사 소개
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>주요 판매 국가 또는 유통채널
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
@@ -105,7 +105,7 @@ export default function Sample() {
 
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <label className="font-medium text-gray-900 text-sm">문의 또는 요청사항</label>
+                <label className="font-medium text-gray-900">문의 또는 요청사항</label>
                 <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/80 rounded-md">선택사항</span>
               </div>
               <textarea className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 h-32 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"></textarea>

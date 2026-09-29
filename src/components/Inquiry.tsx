@@ -27,39 +27,39 @@ export default function Inquiry() {
           <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>회사명
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>담당자명
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>연락처
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2">
-                <label className="block font-medium text-gray-900 text-sm">
+                <label className="block font-medium text-gray-900">
                   <span className="text-red-500 font-bold mr-1">*</span>이메일
                 </label>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2 md:col-span-2">
                 <div className="flex items-center gap-2">
-                  <label className="font-medium text-gray-900 text-sm">회사 홈페이지 또는 간략한 회사 소개</label>
+                  <label className="font-medium text-gray-900">회사 홈페이지 또는 간략한 회사 소개</label>
                   <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/80 rounded-md">선택사항</span>
                 </div>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
               </div>
               <div className="space-y-2 md:col-span-2">
                 <div className="flex items-center gap-2">
-                  <label className="font-medium text-gray-900 text-sm">주요 판매 국가 또는 유통채널</label>
+                  <label className="font-medium text-gray-900">주요 판매 국가 또는 유통채널</label>
                   <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/80 rounded-md">선택사항</span>
                 </div>
                 <input type="text" className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow" />
@@ -105,7 +105,7 @@ export default function Inquiry() {
             </div>
 
             <div className="space-y-2">
-              <label className="block font-medium text-gray-900 text-sm">
+              <label className="block font-medium text-gray-900">
                 <span className="text-red-500 font-bold mr-1">*</span>문의내용
                 <span className="text-gray-400 font-normal text-xs ml-1.5">(자유롭게 적어주세요)</span>
               </label>
