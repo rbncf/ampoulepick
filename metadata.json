@@ -1,0 +1,6 @@
+{
+  "name": "AMPOULE PICK",
+  "description": "앰플 전문 제작 플랫폼 - 준비된 처방과 디자인으로 빠르고 합리적인 가격의 앰플 제작",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
