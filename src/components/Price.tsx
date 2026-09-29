@@ -18,24 +18,26 @@ export default function Price() {
           <div className="space-y-12 max-w-4xl mx-auto">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-gray-900">사용감 중심 앰플 4종</h3>
-                <span className="text-sm sm:text-base font-semibold text-gray-700">MOQ : 3,000개</span>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">사용감 중심 앰플 4종</h3>
+                <span className="text-sm sm:text-base font-semibold text-gray-700 whitespace-nowrap">MOQ : 3,000개</span>
               </div>
-              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left border-collapse">
+              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[320px]">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/2">제품</th>
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/4">용량</th>
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/4 text-right">공급가격</th>
+                    <tr className="bg-gray-50 border-b border-gray-100 text-sm sm:text-base">
+                      <th className="py-3.5 sm:py-4 px-3 sm:px-6 font-semibold text-gray-900">제품</th>
+                      <th className="py-3.5 sm:py-4 px-2 sm:px-6 font-semibold text-gray-900 text-center sm:text-left whitespace-nowrap w-20 sm:w-24 shrink-0" style={{ whiteSpace: 'nowrap' }}>용량</th>
+                      <th className="py-3.5 sm:py-4 px-3 sm:px-6 font-semibold text-gray-900 text-right whitespace-nowrap w-24 sm:w-28 shrink-0" style={{ whiteSpace: 'nowrap' }}>공급가격</th>
                     </tr>
                   </thead>
                   <tbody>
                     {products.textureFocus.map((p, i) => (
-                      <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors">
-                        <td className="py-4 px-6 font-medium text-gray-900">{p.name}</td>
-                        <td className="py-4 px-6 text-gray-600">{p.volume}</td>
-                        <td className="py-4 px-6 text-right font-medium text-gray-900">{p.price}</td>
+                      <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors text-sm sm:text-base">
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-6 font-medium text-gray-900">{p.name}</td>
+                        <td className="py-3.5 sm:py-4 px-2 sm:px-6 text-gray-600 text-center sm:text-left whitespace-nowrap shrink-0" style={{ whiteSpace: 'nowrap' }}>
+                          <span style={{ whiteSpace: 'nowrap', display: 'inline-block' }}>{p.volume.replace(/\s+/g, '\u00A0')}</span>
+                        </td>
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-6 text-right font-medium text-gray-900 whitespace-nowrap shrink-0" style={{ whiteSpace: 'nowrap' }}>{p.price}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -45,24 +47,26 @@ export default function Price() {
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-gray-900">고함량 유효성분 앰플 7종</h3>
-                <span className="text-sm sm:text-base font-semibold text-gray-700">MOQ : 3,000개</span>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">고함량 유효성분 앰플 7종</h3>
+                <span className="text-sm sm:text-base font-semibold text-gray-700 whitespace-nowrap">MOQ : 3,000개</span>
               </div>
-              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-                <table className="w-full text-left border-collapse">
+              <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[320px]">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100">
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/2">제품</th>
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/4">용량</th>
-                      <th className="py-4 px-6 font-semibold text-gray-900 w-1/4 text-right">공급가격</th>
+                    <tr className="bg-gray-50 border-b border-gray-100 text-sm sm:text-base">
+                      <th className="py-3.5 sm:py-4 px-3 sm:px-6 font-semibold text-gray-900">제품</th>
+                      <th className="py-3.5 sm:py-4 px-2 sm:px-6 font-semibold text-gray-900 text-center sm:text-left whitespace-nowrap w-20 sm:w-24 shrink-0" style={{ whiteSpace: 'nowrap' }}>용량</th>
+                      <th className="py-3.5 sm:py-4 px-3 sm:px-6 font-semibold text-gray-900 text-right whitespace-nowrap w-24 sm:w-28 shrink-0" style={{ whiteSpace: 'nowrap' }}>공급가격</th>
                     </tr>
                   </thead>
                   <tbody>
                     {products.highEfficacy.map((p, i) => (
-                      <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors">
-                        <td className="py-4 px-6 font-medium text-gray-900">{p.name}</td>
-                        <td className="py-4 px-6 text-gray-600">{p.volume}</td>
-                        <td className="py-4 px-6 text-right font-medium text-gray-900">{p.price}</td>
+                      <tr key={i} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors text-sm sm:text-base">
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-6 font-medium text-gray-900">{p.name}</td>
+                        <td className="py-3.5 sm:py-4 px-2 sm:px-6 text-gray-600 text-center sm:text-left whitespace-nowrap shrink-0" style={{ whiteSpace: 'nowrap' }}>
+                          <span style={{ whiteSpace: 'nowrap', display: 'inline-block' }}>{p.volume.replace(/\s+/g, '\u00A0')}</span>
+                        </td>
+                        <td className="py-3.5 sm:py-4 px-3 sm:px-6 text-right font-medium text-gray-900 whitespace-nowrap shrink-0" style={{ whiteSpace: 'nowrap' }}>{p.price}</td>
                       </tr>
                     ))}
                   </tbody>
