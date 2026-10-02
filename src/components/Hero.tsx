@@ -68,12 +68,22 @@ export default function Hero() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3 }}
-        className="flex-1 w-full"
+        className="flex-1 w-full flex items-center justify-center p-0"
       >
-        <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden relative flex items-center justify-center">
-          <div className="text-gray-400">Hero Image Placeholder</div>
-          {/* Add actual image here when available */}
-        </div>
+        <img 
+          src="/images/단체사진 2줄 배경없음.png" 
+          alt="AMPOULE PICK 11종 앰플 라인업" 
+          referrerPolicy="no-referrer"
+          className="w-full h-auto max-w-xl object-contain drop-shadow-2xl"
+          style={{ filter: 'drop-shadow(0 20px 25px rgba(0, 0, 0, 0.18)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.1))' }}
+          onError={(e) => {
+            const target = e.currentTarget;
+            const fallback = 'https://rbcnf.cafe24.com/ampoulepick/%EB%8B%A8%EC%B2%B4%EC%82%AC%EC%A7%84%202%EC%A4%84%20%EB%B0%B0%EA%B2%BD%EC%97%86%EC%9D%8C.png';
+            if (target.src !== fallback) {
+              target.src = fallback;
+            }
+          }}
+        />
       </motion.div>
     </section>
   );
