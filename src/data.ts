@@ -2,19 +2,23 @@ export const products = {
   textureFocus: [
     {
       id: 'tf1',
-      name: '리뉴잉 퍼밍 앰플',
+      name: '리뉴얼 퍼밍 앰플',
       keyIngredient: '콜라겐',
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
+      image: '/images/리뉴얼 퍼밍 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%A6%AC%EB%89%B4%EC%96%BC%20%ED%8D%BC%EB%B0%8D%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'tf2',
-      name: '레디언스 브라이트 앰플',
+      name: '래디언스 브라이트 앰플',
       keyIngredient: '비타민 C',
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
+      image: '/images/래디언스 브라이트 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%9E%98%EB%94%94%EC%96%B8%EC%8A%A4%20%EB%B8%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'tf3',
@@ -23,23 +27,29 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
+      image: '/images/하이드레이션 밸런스 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%ED%95%98%EC%9D%B4%EB%93%9C%EB%A0%88%EC%9D%B4%EC%85%98%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'tf4',
-      name: '인텐시브 베리어 앰플',
+      name: '인텐시브 배리어 앰플',
       keyIngredient: '세라마이드',
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
+      image: '/images/인텐시브 배리어 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%ED%85%90%EC%8B%9C%EB%B8%8C%20%EB%B0%B0%EB%A6%AC%EC%96%B4%20%EC%95%B0%ED%94%8C.png',
     },
   ],
   highEfficacy: [
     {
       id: 'he1',
-      name: '히알루론산 앰플',
+      name: '히알루로닉 앰플',
       volume: '30\u00A0mL',
       price: '₩2,050',
       moq: '3,000개',
+      image: '/images/히알루로닉 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%ED%9E%88%EC%95%8C%EB%A3%A8%EB%A1%9C%EB%8B%89%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he2',
@@ -47,6 +57,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩2,100',
       moq: '3,000개',
+      image: '/images/시카 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%8B%9C%EC%B9%B4%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he3',
@@ -54,6 +66,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩2,250',
       moq: '3,000개',
+      image: '/images/세라마이드 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%84%B8%EB%9D%BC%EB%AF%B8%EB%93%9C%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he4',
@@ -61,6 +75,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
+      image: '/images/나이아신아마이드 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%82%98%EC%9D%B4%EC%95%84%EC%8B%A0%EC%95%84%EB%A7%88%EC%9D%B4%EB%93%9C%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he5',
@@ -68,6 +84,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩1,750',
       moq: '3,000개',
+      image: '/images/콜라겐 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%BD%9C%EB%9D%BC%EA%B2%AC%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he6',
@@ -75,6 +93,8 @@ export const products = {
       volume: '15\u00A0mL',
       price: '₩2,100',
       moq: '3,000개',
+      image: '/images/PDRN 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/PDRN%20%EC%95%B0%ED%94%8C.png',
     },
     {
       id: 'he7',
@@ -82,6 +102,8 @@ export const products = {
       volume: '15\u00A0mL',
       price: '₩2,100',
       moq: '3,000개',
+      image: '/images/비타민C 앰플.png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%B9%84%ED%83%80%EB%AF%BCC%20%EC%95%B0%ED%94%8C.png',
     },
   ],
 };

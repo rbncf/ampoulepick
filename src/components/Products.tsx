@@ -38,8 +38,23 @@ export default function Products() {
                   key={product.id} 
                   className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group cursor-pointer flex flex-col h-full"
                 >
-                  <div className="aspect-square bg-gray-50 rounded-xl mb-6 flex items-center justify-center text-gray-400 group-hover:bg-gray-100 transition-colors">
-                    [제품 이미지]
+                  <div className="aspect-square bg-gray-50/80 rounded-xl mb-6 flex items-center justify-center overflow-hidden border border-gray-100">
+                    {product.image ? (
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        referrerPolicy="no-referrer" 
+                        className="w-full h-full object-contain p-2"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if ('fallbackImage' in product && product.fallbackImage && target.src !== product.fallbackImage) {
+                            target.src = product.fallbackImage as string;
+                          }
+                        }}
+                      />
+                    ) : (
+                      <span className="text-gray-400 text-sm">[제품 이미지]</span>
+                    )}
                   </div>
                   <h4 className="font-bold text-lg text-gray-900 mb-1">{product.name}</h4>
                   <p className="text-sm text-blue-600 font-medium mb-4">{product.volume}</p>
@@ -70,8 +85,23 @@ export default function Products() {
                   key={product.id} 
                   className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group cursor-pointer flex flex-col h-full"
                 >
-                  <div className="aspect-square bg-gray-50 rounded-xl mb-6 flex items-center justify-center text-gray-400 group-hover:bg-gray-100 transition-colors">
-                    [제품 이미지]
+                  <div className="aspect-square bg-gray-50/80 rounded-xl mb-6 flex items-center justify-center overflow-hidden border border-gray-100">
+                    {product.image ? (
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        referrerPolicy="no-referrer" 
+                        className="w-full h-full object-contain p-2"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if ('fallbackImage' in product && product.fallbackImage && target.src !== product.fallbackImage) {
+                            target.src = product.fallbackImage as string;
+                          }
+                        }}
+                      />
+                    ) : (
+                      <span className="text-gray-400 text-sm">[제품 이미지]</span>
+                    )}
                   </div>
                   <h4 className="font-bold text-lg text-gray-900 mb-1">{product.name}</h4>
                   <p className="text-sm text-blue-600 font-medium mb-4">{product.volume}</p>

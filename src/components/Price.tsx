@@ -104,16 +104,57 @@ export default function Price() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
-              { title: '용기 형태', opts: '각진형 · 둥근형' },
-              { title: '용기 색상', opts: '투명 · 무광 반투명 · 갈색' },
-              { title: '스포이드 고무', opts: '화이트 · 블랙' },
-              { title: '스포이드 링', opts: '실버 · 골드 · 화이트 · 블랙' },
-              { title: '안전캡 스포이드', opts: '화이트 · 블랙' },
-              { title: '인쇄 방식', opts: '실크스크린 인쇄 · 스티커 라벨' }
+              { 
+                title: '용기 형태', 
+                opts: '각진형 · 둥근형',
+                image: '/images/용기 형태.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9A%A9%EA%B8%B0%20%ED%98%95%ED%83%9C.png'
+              },
+              { 
+                title: '용기 색상', 
+                opts: '투명 · 무광 반투명 · 갈색',
+                image: '/images/용기 색상.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9A%A9%EA%B8%B0%20%EC%83%89%EC%83%81.png'
+              },
+              { 
+                title: '스포이드 고무', 
+                opts: '화이트 · 블랙',
+                image: '/images/스포이드 고무.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C%20%EA%B3%A0%EB%AC%B4.png'
+              },
+              { 
+                title: '스포이드 링', 
+                opts: '실버 · 골드 · 화이트 · 블랙',
+                image: '/images/스포이드 링.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C%20%EB%A7%81.png'
+              },
+              { 
+                title: '안전캡 스포이드', 
+                opts: '화이트 · 블랙',
+                image: '/images/안전캡 스포이드.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%95%88%EC%A0%84%EC%BA%A1%20%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C.png'
+              },
+              { 
+                title: '인쇄 방식', 
+                opts: '실크스크린 인쇄 · 스티커 라벨',
+                image: '/images/인쇄 방식.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%EC%87%84%20%EB%B0%A9%EC%8B%9D.png'
+              }
             ].map((opt, i) => (
               <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4">
-                <div className="aspect-video bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 text-sm">
-                  [ {opt.title} 이미지 ]
+                <div className="aspect-video bg-gray-50 rounded-xl overflow-hidden border border-gray-100 flex items-center justify-center">
+                  <img 
+                    src={opt.image} 
+                    alt={opt.title} 
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-contain p-2"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (opt.fallback && target.src !== opt.fallback) {
+                        target.src = opt.fallback;
+                      }
+                    }}
+                  />
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900">{opt.title}</h4>
