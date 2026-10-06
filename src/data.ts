@@ -27,8 +27,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
-      image: '/images/하이드레이션 밸런스 앰플.png',
-      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%ED%95%98%EC%9D%B4%EB%93%9C%EB%A0%88%EC%9D%B4%EC%85%98%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C.png',
+      image: '/images/하이드레이션 밸런스 앰플 (사이즈변경).png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%ED%95%98%EC%9D%B4%EB%93%9C%EB%A0%88%EC%9D%B4%EC%85%98%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C%20(%EC%82%AC%EC%9D%B4%EC%A6%88%EB%B3%80%EA%B2%BD).png',
     },
     {
       id: 'tf4',
@@ -37,8 +37,8 @@ export const products = {
       volume: '30\u00A0mL',
       price: '₩1,550',
       moq: '3,000개',
-      image: '/images/인텐시브 배리어 앰플.png',
-      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%ED%85%90%EC%8B%9C%EB%B8%8C%20%EB%B0%B0%EB%A6%AC%EC%96%B4%20%EC%95%B0%ED%94%8C.png',
+      image: '/images/인텐시브 배리어 앰플 (사이즈변경).png',
+      fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%ED%85%90%EC%8B%9C%EB%B8%8C%20%EB%B0%B0%EB%A6%AC%EC%96%B4%20%EC%95%B0%ED%94%8C%20(%EC%82%AC%EC%9D%B4%EC%A6%88%EB%B3%80%EA%B2%BD).png',
     },
   ],
   highEfficacy: [
