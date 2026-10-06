@@ -150,13 +150,41 @@ export default function CustomBrand() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {[1, 2, 3, 4, 5].map((num) => (
-              <div key={num} className="space-y-4 group cursor-pointer">
-                <div className="aspect-[3/4] bg-gray-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-gray-100 group-hover:border-blue-200 transition-all group-hover:shadow-md">
-                   <div className="text-gray-400 text-sm mb-2">3D 목업</div>
-                   <div className="text-gray-300 text-xs text-center">용기 + 단상자</div>
+            {[
+              { id: 1, title: '템플릿 01', image: null, fallback: null },
+              { 
+                id: 2, 
+                title: '템플릿 02', 
+                image: '/images/온종일 수분 밸런스 앰플 패키지.png',
+                fallback: 'https://rbcnf.cafe24.com/%EC%98%A8%EC%A2%85%EC%9D%BC%20%EC%88%98%EB%B6%84%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C%20%ED%8C%A8%ED%82%A4%EC%A7%80.png'
+              },
+              { id: 3, title: '템플릿 03', image: null, fallback: null },
+              { id: 4, title: '템플릿 04', image: null, fallback: null },
+              { id: 5, title: '템플릿 05', image: null, fallback: null },
+            ].map((tmpl) => (
+              <div key={tmpl.id} className="space-y-4 group cursor-pointer">
+                <div className="aspect-[3/4] bg-gray-50 rounded-2xl overflow-hidden flex flex-col items-center justify-center border border-gray-100 group-hover:border-blue-200 transition-all group-hover:shadow-md relative">
+                  {tmpl.image ? (
+                    <img 
+                      src={tmpl.image} 
+                      alt={tmpl.title} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-300"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (tmpl.fallback && target.src !== tmpl.fallback) {
+                          target.src = tmpl.fallback;
+                        }
+                      }}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center p-4">
+                      <div className="text-gray-400 text-sm mb-2">3D 목업</div>
+                      <div className="text-gray-300 text-xs text-center">용기 + 단상자</div>
+                    </div>
+                  )}
                 </div>
-                <p className="text-center font-medium text-gray-900">템플릿 0{num}</p>
+                <p className="text-center font-medium text-gray-900">{tmpl.title}</p>
               </div>
             ))}
           </div>
