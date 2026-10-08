@@ -113,14 +113,14 @@ export default function Price() {
               { 
                 title: '용기 색상', 
                 opts: '투명 · 무광 반투명 · 갈색',
-                image: '/images/용기 색상.png',
-                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9A%A9%EA%B8%B0%20%EC%83%89%EC%83%81.png'
+                image: '/images/용기색상_배경제거.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9A%A9%EA%B8%B0%EC%83%89%EC%83%81_%EB%B0%B0%EA%B2%BD%EC%A0%9C%EA%B1%B0.png'
               },
               { 
                 title: '스포이드 고무', 
                 opts: '화이트 · 블랙',
-                image: '/images/스포이드 고무.png',
-                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C%20%EA%B3%A0%EB%AC%B4.png'
+                image: '/images/스포이드 고무_배경제거.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C%20%EA%B3%A0%EB%AC%B4_%EB%B0%B0%EA%B2%BD%EC%A0%9C%EA%B1%B0.png'
               },
               { 
                 title: '스포이드 링', 
@@ -131,14 +131,14 @@ export default function Price() {
               { 
                 title: '안전캡 스포이드', 
                 opts: '화이트 · 블랙',
-                image: '/images/안전캡 스포이드.png',
-                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%95%88%EC%A0%84%EC%BA%A1%20%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C.png'
+                image: '/images/안전캡스포이드_배경제거.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%95%88%EC%A0%84%EC%BA%A1%EC%8A%A4%ED%8F%AC%EC%9D%B4%EB%93%9C_%EB%B0%B0%EA%B2%BD%EC%A0%9C%EA%B1%B0.png'
               },
               { 
                 title: '인쇄 방식', 
                 opts: '실크스크린 인쇄 · 스티커 라벨',
-                image: '/images/인쇄 방식.png',
-                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%EC%87%84%20%EB%B0%A9%EC%8B%9D.png'
+                image: '/images/인쇄방식_배경제거2.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%EC%87%84%EB%B0%A9%EC%8B%9D_%EB%B0%B0%EA%B2%BD%EC%A0%9C%EA%B1%B02.png'
               }
             ].map((opt, i) => (
               <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4">
