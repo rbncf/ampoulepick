@@ -114,7 +114,7 @@ export default function CustomBrand() {
 
           <div className="bg-gray-900 text-white rounded-3xl p-8 lg:p-12 text-center space-y-4">
             <h3 className="text-2xl font-bold">어떤 방식을 선택해도 가격은 같습니다</h3>
-            <p className="text-gray-400">브랜드 제품 그대로 주문 / 고객님 브랜드로 앰플 생산</p>
+            <p className="text-gray-400">브랜드 제품 그대로 주문 <br /> 고객님 브랜드로 앰플 생산</p>
             <p className="text-lg font-medium">동일한 공급가격 (MOQ 3,000개)</p>
           </div>
 
