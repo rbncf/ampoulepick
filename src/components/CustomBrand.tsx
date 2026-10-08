@@ -151,23 +151,48 @@ export default function CustomBrand() {
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
-              { id: 1, title: '템플릿 01', image: null, fallback: null },
+              { 
+                id: 1, 
+                title: '템플릿 01', 
+                desc: '로고 강조 (역삼각형)',
+                image: '/images/템플릿01 로고 강조 (역삼각형).png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%ED%85%9C%ED%94%8C%EB%A6%BF01%20%EB%A1%9C%EA%B3%A0%20%EA%B0%95%EC%A1%B0%20%28%EC%97%AD%EC%82%BC%EA%B0%81%ED%98%95%29.png'
+              },
               { 
                 id: 2, 
                 title: '템플릿 02', 
-                image: '/images/온종일 수분 밸런스 앰플 패키지.png',
-                fallback: 'https://rbcnf.cafe24.com/%EC%98%A8%EC%A2%85%EC%9D%BC%20%EC%88%98%EB%B6%84%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C%20%ED%8C%A8%ED%82%A4%EC%A7%80.png'
+                desc: '심플 (중앙 집중형)',
+                image: '/images/템플릿02 심플 (중앙 집중형).png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%ED%85%9C%ED%94%8C%EB%A6%BF02%20%EC%8B%AC%ED%94%8C%20%28%EC%A4%91%EC%95%99%20%EC%A7%91%EC%A4%91%ED%98%95%29.png'
               },
-              { id: 3, title: '템플릿 03', image: null, fallback: null },
-              { id: 4, title: '템플릿 04', image: null, fallback: null },
-              { id: 5, title: '템플릿 05', image: null, fallback: null },
+              { 
+                id: 3, 
+                title: '템플릿 03', 
+                desc: '제품명 강조 (가로형)',
+                image: '/images/템플릿03 제품명 강조 (가로형).png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%ED%85%9C%ED%94%8C%EB%A6%BF03%20%EC%A0%9C%ED%92%88%EB%AA%85%20%EA%B0%95%EC%A1%B0%20%28%EA%B0%80%EB%A1%9C%ED%98%95%29.png'
+              },
+              { 
+                id: 4, 
+                title: '템플릿 04', 
+                desc: '성분 설명',
+                image: '/images/템플릿04 성분 설명.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%ED%85%9C%ED%94%8C%EB%A6%BF04%20%EC%84%B1%EB%B6%84%20%EC%84%A4%EB%AA%85.png'
+              },
+              { 
+                id: 5, 
+                title: '템플릿 05', 
+                desc: '배경 삽입',
+                image: '/images/템플릿05 배경 삽입.png',
+                fallback: 'https://rbcnf.cafe24.com/ampoulepick/%ED%85%9C%ED%94%8C%EB%A6%BF05%20%EB%B0%B0%EA%B2%BD%20%EC%82%BD%EC%9E%85.png'
+              },
             ].map((tmpl) => (
-              <div key={tmpl.id} className="space-y-4 group cursor-pointer">
+              <div key={tmpl.id} className="space-y-3 group cursor-pointer">
                 <div className="aspect-[3/4] bg-gray-50 rounded-2xl overflow-hidden flex flex-col items-center justify-center border border-gray-100 group-hover:border-blue-200 transition-all group-hover:shadow-md relative">
                   {tmpl.image ? (
                     <img 
                       src={tmpl.image} 
-                      alt={tmpl.title} 
+                      alt={`${tmpl.title} - ${tmpl.desc}`} 
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-300"
                       onError={(e) => {
@@ -184,7 +209,10 @@ export default function CustomBrand() {
                     </div>
                   )}
                 </div>
-                <p className="text-center font-medium text-gray-900">{tmpl.title}</p>
+                <div className="text-center">
+                  <p className="font-semibold text-gray-900">{tmpl.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{tmpl.desc}</p>
+                </div>
               </div>
             ))}
           </div>

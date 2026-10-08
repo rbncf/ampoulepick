@@ -14,18 +14,18 @@ export default function Products() {
             개발에 필요한 시간과 비용을 줄였습니다.
           </p>
           <div className="inline-flex gap-4 items-center text-sm font-medium text-blue-600 bg-blue-50 px-6 py-2 rounded-full">
-            <span>사용감 중심 앰플 4종</span>
+            <span>데일리 밸런스 앰플 4종</span>
             <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
             <span>고함량 유효성분 앰플 7종</span>
           </div>
         </div>
 
         <div className="space-y-16">
-          {/* Texture Focus 4 */}
+          {/* Daily Balance 4 */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-gray-900">사용감 중심 앰플 4종</h3>
-              <p className="text-gray-600">핵심 성분과 콘셉트는 유지하면서 발림성과 사용감에 중점을 둔 제품입니다.</p>
+              <h3 className="text-2xl font-bold text-gray-900">데일리 밸런스 앰플 4종</h3>
+              <p className="text-gray-600">핵심 성분과 콘셉트는 유지하면서 매일 편안하게 사용할 수 있는 발림성과 사용감에 중점을 둔 제품입니다.</p>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

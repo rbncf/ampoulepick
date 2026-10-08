@@ -18,7 +18,7 @@ export default function Price() {
           <div className="space-y-12 max-w-4xl mx-auto">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">사용감 중심 앰플 4종</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">데일리 밸런스 앰플 4종</h3>
                 <span className="text-sm sm:text-base font-semibold text-gray-700 whitespace-nowrap">MOQ : 3,000개</span>
               </div>
               <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
