@@ -217,7 +217,7 @@ export default function CustomBrand() {
             ))}
           </div>
           
-          <p className="text-center text-gray-500 font-medium">모든 템플릿은 브랜드 로고와 원하는 색상으로 변경할 수 있습니다.</p>
+          <p className="text-center text-gray-500 font-medium">※ 모든 템플릿은 고객님의 브랜드 로고와 원하는 색상으로 변경할 수 있습니다.</p>
         </div>
 
       </div>

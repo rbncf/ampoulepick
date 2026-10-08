@@ -117,7 +117,7 @@ export default function Inquiry() {
                 거래 문의하기
               </button>
               <p className="text-center text-sm font-medium text-gray-600">
-                ※문의 접수 후 영업일 기준 +2일 이내에 연락 드립니다. (토, 일 및 공휴일 제외)
+                ※문의 접수 후 영업일 기준 +2일 이내에 연락 드립니다. <br /> (토, 일 및 공휴일 제외)
               </p>
             </div>
           </form>

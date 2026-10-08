@@ -41,8 +41,13 @@ export default function Process() {
         <div className="space-y-12">
           
           <div className="space-y-6">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900">브랜드 제품 그대로 주문</h3>
-            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 space-y-8 relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">브랜드 제품 그대로 주문</h3>
+              <div className="text-sm sm:text-base font-medium text-gray-900">
+                생산기간 : <span className="text-blue-600 font-semibold">계약금 입금 후 평균 6주</span>
+              </div>
+            </div>
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {processBrand.map((step, i) => {
@@ -50,11 +55,11 @@ export default function Process() {
                   return (
                     <div key={i} className="space-y-4 group">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80 shadow-xs group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-200">
-                          <IconComponent className="w-5 h-5" strokeWidth={2.2} />
-                        </div>
                         <div className="text-3xl sm:text-4xl font-black text-gray-200 tracking-tight group-hover:text-gray-300 transition-colors">
                           {step.step}
+                        </div>
+                        <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80 shadow-xs group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-200">
+                          <IconComponent className="w-5 h-5" strokeWidth={2.2} />
                         </div>
                       </div>
                       <h4 className="font-bold text-gray-900 text-lg">{step.title}</h4>
@@ -63,15 +68,17 @@ export default function Process() {
                   );
                 })}
               </div>
-              <div className="pt-6 border-t border-gray-100 font-medium text-gray-900">
-                생산기간 : <span className="text-blue-600">계약금 입금 후 평균 6주</span>
-              </div>
             </div>
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900">고객 브랜드로 제작</h3>
-            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 space-y-8 relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">고객 브랜드로 제작</h3>
+              <div className="text-sm sm:text-base font-medium text-gray-900">
+                생산기간 : <span className="text-blue-600 font-semibold">계약금 입금 후 평균 6주</span>
+              </div>
+            </div>
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-6">
                 {processCustom.map((step, i) => {
@@ -79,11 +86,11 @@ export default function Process() {
                   return (
                     <div key={i} className="space-y-4 group">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80 shadow-xs group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-200">
-                          <IconComponent className="w-5 h-5" strokeWidth={2.2} />
-                        </div>
                         <div className="text-3xl sm:text-4xl font-black text-gray-200 tracking-tight group-hover:text-gray-300 transition-colors">
                           {step.step}
+                        </div>
+                        <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/80 shadow-xs group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all duration-200">
+                          <IconComponent className="w-5 h-5" strokeWidth={2.2} />
                         </div>
                       </div>
                       <h4 className="font-bold text-gray-900 text-lg">{step.title}</h4>
@@ -91,9 +98,6 @@ export default function Process() {
                     </div>
                   );
                 })}
-              </div>
-              <div className="pt-6 border-t border-gray-100 font-medium text-gray-900">
-                생산기간 : <span className="text-blue-600">계약금 입금 후 평균 6주</span>
               </div>
             </div>
           </div>
