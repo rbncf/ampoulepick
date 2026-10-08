@@ -59,9 +59,9 @@ export default function CustomBrand() {
                 준비된 완제품을 기존 브랜드 그대로 공급합니다. 별도의 디자인 작업 없이 빠르게 주문할 수 있습니다.
               </p>
 
-              <div className="flex items-center gap-2 text-sm font-medium text-blue-600 bg-blue-50 px-4 py-3 rounded-xl relative z-10 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-2.5 lg:gap-1.5 xl:gap-2.5 text-[13.5px] sm:text-[15.5px] lg:text-[14.5px] xl:text-[16px] font-bold text-blue-600 bg-blue-50 px-3.5 sm:px-5 py-3.5 rounded-xl relative z-10 whitespace-nowrap">
                 <span>앰플 선택</span>
-                <span>&rarr;</span>
+                <span className="text-blue-400 font-semibold">&rarr;</span>
                 <span>주문</span>
               </div>
 
@@ -86,15 +86,15 @@ export default function CustomBrand() {
                 원하는 앰플과 디자인 템플릿을 선택하면 고객님의 브랜드로 제작합니다.
               </p>
               
-              <div className="flex items-center gap-2 text-sm font-medium text-blue-600 bg-blue-50 px-4 py-3 rounded-xl relative z-10 flex-wrap">
+              <div className="flex items-center justify-between sm:justify-start gap-1 sm:gap-2 lg:gap-1.5 xl:gap-2.5 text-[13.5px] sm:text-[15.5px] lg:text-[14.5px] xl:text-[16px] font-bold text-blue-600 bg-blue-50 px-3.5 sm:px-5 py-3.5 rounded-xl relative z-10 whitespace-nowrap">
                 <span>앰플 선택</span>
-                <span>&rarr;</span>
+                <span className="text-blue-400 font-semibold">&rarr;</span>
                 <span>디자인 선택</span>
-                <span>&rarr;</span>
+                <span className="text-blue-400 font-semibold">&rarr;</span>
                 <span>로고·색상 전달</span>
-                <span>&rarr;</span>
+                <span className="text-blue-400 font-semibold">&rarr;</span>
                 <span>시안 확정</span>
-                <span>&rarr;</span>
+                <span className="text-blue-400 font-semibold">&rarr;</span>
                 <span>주문</span>
               </div>
               
