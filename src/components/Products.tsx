@@ -86,7 +86,7 @@ export default function Products() {
                   <h4 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">{product.name}</h4>
                   <p className="text-sm text-blue-600 font-medium mb-4">{product.volume}</p>
                   <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-                    <span className="text-xs text-gray-400 font-normal">상세보기 클릭</span>
+                    <span className="text-xs text-gray-500 font-medium">공급가격 {product.price}</span>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
@@ -117,7 +117,8 @@ export default function Products() {
                   viewport={{ once: true }}
                   transition={{ delay: (i % 4) * 0.1 }}
                   key={product.id} 
-                  className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full"
+                  onClick={() => setSelectedProduct(product)}
+                  className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all group cursor-pointer flex flex-col h-full"
                 >
                   <div className="aspect-square bg-gray-50/80 rounded-xl mb-6 flex items-center justify-center overflow-hidden border border-gray-100">
                     {product.image ? (
@@ -125,7 +126,7 @@ export default function Products() {
                         src={product.image} 
                         alt={product.name} 
                         referrerPolicy="no-referrer" 
-                        className="w-full h-full object-contain p-2"
+                        className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           const target = e.currentTarget;
                           if ('fallbackImage' in product && product.fallbackImage && target.src !== product.fallbackImage) {
@@ -137,10 +138,19 @@ export default function Products() {
                       <span className="text-gray-400 text-sm">[제품 이미지]</span>
                     )}
                   </div>
-                  <h4 className="font-bold text-lg text-gray-900 mb-1">{product.name}</h4>
+                  <h4 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">{product.name}</h4>
                   <p className="text-sm text-blue-600 font-medium mb-4">{product.volume}</p>
-                  <div className="mt-auto pt-4 border-t border-gray-50 text-right">
-                    <span className="text-xs text-gray-400">공급가격 {product.price}</span>
+                  <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                    <span className="text-xs text-gray-500 font-medium">공급가격 {product.price}</span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProduct(product);
+                      }}
+                      className="text-sm font-semibold text-blue-600 group-hover:text-blue-700 transition-colors inline-flex items-center gap-1"
+                    >
+                      자세히 보기 &rarr;
+                    </button>
                   </div>
                 </motion.div>
               ))}
@@ -168,12 +178,9 @@ export default function Products() {
               {/* Modal Header */}
               <div className="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between bg-white/95 sticky top-0 z-10 backdrop-blur-xs">
                 <div>
-                  <div className="inline-flex items-center gap-2">
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">데일리 밸런스</span>
-                    {selectedProduct.keyIngredient && (
-                      <span className="text-xs text-gray-500 font-medium">핵심 성분: {selectedProduct.keyIngredient}</span>
-                    )}
-                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 inline-block">
+                    {selectedProduct.id?.startsWith('he') ? '고함량 유효성분' : '데일리 밸런스'}
+                  </span>
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 mt-1">{selectedProduct.name}</h3>
                 </div>
                 <button 
