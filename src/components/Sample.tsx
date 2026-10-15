@@ -59,13 +59,26 @@ export default function Sample() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const fieldMapping: Record<string, string> = {
+    '회사명': 'company',
+    '담당자명': 'contactPerson',
+    '연락처': 'phone',
+    '이메일': 'email',
+    '회사 홈페이지 또는 간략한 회사 소개': 'companyIntro',
+    '주요 판매 국가 또는 유통채널': 'salesChannel',
+    '검토 중인 주문 방식': 'orderMethod',
+    '문의 또는 요청사항': 'message',
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
+    const rawName = e.target.name;
+    const key = fieldMapping[rawName] || rawName;
+    const val = e.target.value;
+    setFormData(prev => ({ ...prev, [key]: val }));
+    if (errors[key]) {
       setErrors(prev => {
         const next = { ...prev };
-        delete next[name];
+        delete next[key];
         return next;
       });
     }
@@ -99,10 +112,9 @@ export default function Sample() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = (e: React.FormEvent) => {
     if (!validate()) {
+      e.preventDefault();
       const firstErrorKey = Object.keys(errors)[0];
       const el = document.getElementById(`field-${firstErrorKey}`);
       if (el) {
@@ -112,40 +124,39 @@ export default function Sample() {
     }
 
     setIsSubmitting(true);
+    setSubmittedData({ ...formData });
 
-    try {
-      const payload = {
-        _subject: `[AMPOULE PICK] 샘플 신청서 - ${formData.company} (${formData.contactPerson}님)`,
-        _replyto: formData.email,
-        _template: 'table',
-        _captcha: 'false',
-        '회사명': formData.company,
-        '담당자명': formData.contactPerson,
-        '연락처': formData.phone,
-        '이메일': formData.email,
-        '회사 홈페이지 또는 소개': formData.companyIntro,
-        '주요 판매 국가 및 유통채널': formData.salesChannel,
-        '관심 제품 (최대 3개)': formData.selectedProducts.join(', '),
-        '검토 중인 주문 방식': formData.orderMethod,
-        '문의 또는 요청사항': formData.message || '없음',
-        '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
-      };
+    // Backup AJAX dispatch in parallel
+    const payload = {
+      _subject: `[AMPOULE PICK] 샘플 신청서 - ${formData.company} (${formData.contactPerson}님)`,
+      _replyto: formData.email,
+      _template: 'table',
+      _captcha: 'false',
+      '회사명': formData.company,
+      '담당자명': formData.contactPerson,
+      '연락처': formData.phone,
+      '이메일': formData.email,
+      '회사 홈페이지 또는 간략한 회사 소개': formData.companyIntro,
+      '주요 판매 국가 또는 유통채널': formData.salesChannel,
+      '관심 제품 (최대 3개)': formData.selectedProducts.join(', '),
+      '검토 중인 주문 방식': formData.orderMethod,
+      '문의 또는 요청사항': formData.message || '없음',
+      '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+    };
 
-      await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch {
-      // Regardless of network state, proceed to show confirmation with submitted data
-    } finally {
+    fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+
+    // Native form submit continues to hidden iframe so email is 100% delivered with all fields!
+    setTimeout(() => {
       setIsSubmitting(false);
-      setSubmittedData({ ...formData });
       setShowSuccessModal(true);
-      // Reset form fields
       setFormData({
         company: '',
         contactPerson: '',
@@ -158,7 +169,7 @@ export default function Sample() {
         message: '',
       });
       setErrors({});
-    }
+    }, 1000);
   };
 
   return (
@@ -184,7 +195,25 @@ export default function Sample() {
             </div>
           </div>
           
-          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+          {/* Background iframe for reliable delivery */}
+          <iframe name="hidden_sample_iframe" id="hidden_sample_iframe" className="hidden" title="hidden_sample_iframe" />
+
+          <form 
+            action="https://formsubmit.co/oneteam@rbcnf.co.kr"
+            method="POST"
+            target="hidden_sample_iframe"
+            className="space-y-8" 
+            onSubmit={handleSubmit} 
+            noValidate
+          >
+            {/* FormSubmit Config & Hidden Data */}
+            <input type="hidden" name="_subject" value={`[AMPOULE PICK] 샘플 신청서 - ${formData.company || '신청'} (${formData.contactPerson || '담당자'}님)`} />
+            <input type="hidden" name="_replyto" value={formData.email} />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="관심 제품 (최대 3개)" value={formData.selectedProducts.join(', ')} />
+            <input type="hidden" name="신청일시" value={new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })} />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 회사명 */}
               <div id="field-company" className="space-y-2">
@@ -193,7 +222,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="company"
+                  name="회사명"
                   value={formData.company}
                   onChange={handleChange}
                   placeholder="예: 주식회사 앰플픽"
@@ -216,7 +245,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="contactPerson"
+                  name="담당자명"
                   value={formData.contactPerson}
                   onChange={handleChange}
                   placeholder="예: 홍길동 팀장"
@@ -239,7 +268,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="tel" 
-                  name="phone"
+                  name="연락처"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="예: 010-1234-5678"
@@ -262,7 +291,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="email" 
-                  name="email"
+                  name="이메일"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="예: contact@company.com"
@@ -285,7 +314,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="companyIntro"
+                  name="회사 홈페이지 또는 간략한 회사 소개"
                   value={formData.companyIntro}
                   onChange={handleChange}
                   placeholder="예: https://example.com 또는 화장품 유통 및 뷰티 브랜드 운영 기업"
@@ -308,7 +337,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="salesChannel"
+                  name="주요 판매 국가 또는 유통채널"
                   value={formData.salesChannel}
                   onChange={handleChange}
                   placeholder="예: 국내 온라인몰(스마트스토어, 쿠팡), 일본 Qoo10, 동남아 쇼피 등"
@@ -390,7 +419,7 @@ export default function Sample() {
                     <div className="relative flex items-center justify-center w-5 h-5">
                       <input 
                         type="radio" 
-                        name="orderMethod" 
+                        name="검토 중인 주문 방식" 
                         value={method}
                         checked={formData.orderMethod === method}
                         onChange={handleChange}
@@ -413,7 +442,7 @@ export default function Sample() {
                 <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/80 rounded-md">선택사항</span>
               </div>
               <textarea 
-                name="message"
+                name="문의 또는 요청사항"
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="샘플 수령 주소나 기타 궁금하신 점을 자유롭게 적어주세요."
