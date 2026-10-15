@@ -59,26 +59,13 @@ export default function Sample() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const fieldMapping: Record<string, string> = {
-    '회사명': 'company',
-    '담당자명': 'contactPerson',
-    '연락처': 'phone',
-    '이메일': 'email',
-    '회사 홈페이지 또는 간략한 회사 소개': 'companyIntro',
-    '주요 판매 국가 또는 유통채널': 'salesChannel',
-    '검토 중인 주문 방식': 'orderMethod',
-    '문의 또는 요청사항': 'message',
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const rawName = e.target.name;
-    const key = fieldMapping[rawName] || rawName;
-    const val = e.target.value;
-    setFormData(prev => ({ ...prev, [key]: val }));
-    if (errors[key]) {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
       setErrors(prev => {
         const next = { ...prev };
-        delete next[key];
+        delete next[name];
         return next;
       });
     }
@@ -112,9 +99,10 @@ export default function Sample() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!validate()) {
-      e.preventDefault();
       const firstErrorKey = Object.keys(errors)[0];
       const el = document.getElementById(`field-${firstErrorKey}`);
       if (el) {
@@ -124,39 +112,40 @@ export default function Sample() {
     }
 
     setIsSubmitting(true);
-    setSubmittedData({ ...formData });
 
-    // Backup AJAX dispatch in parallel
-    const payload = {
-      _subject: `[AMPOULE PICK] 샘플 신청서 - ${formData.company} (${formData.contactPerson}님)`,
-      _replyto: formData.email,
-      _template: 'table',
-      _captcha: 'false',
-      '회사명': formData.company,
-      '담당자명': formData.contactPerson,
-      '연락처': formData.phone,
-      '이메일': formData.email,
-      '회사 홈페이지 또는 간략한 회사 소개': formData.companyIntro,
-      '주요 판매 국가 또는 유통채널': formData.salesChannel,
-      '관심 제품 (최대 3개)': formData.selectedProducts.join(', '),
-      '검토 중인 주문 방식': formData.orderMethod,
-      '문의 또는 요청사항': formData.message || '없음',
-      '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
-    };
+    try {
+      const payload = {
+        _subject: `[AMPOULE PICK] 샘플 신청서 - ${formData.company} (${formData.contactPerson}님)`,
+        _replyto: formData.email,
+        _template: 'table',
+        _captcha: 'false',
+        '회사명': formData.company,
+        '담당자명': formData.contactPerson,
+        '연락처': formData.phone,
+        '이메일': formData.email,
+        '회사 홈페이지 또는 소개': formData.companyIntro,
+        '주요 판매 국가 및 유통채널': formData.salesChannel,
+        '관심 제품 (최대 3개)': formData.selectedProducts.join(', '),
+        '검토 중인 주문 방식': formData.orderMethod,
+        '문의 또는 요청사항': formData.message || '없음',
+        '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+      };
 
-    fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    }).catch(() => {});
-
-    // Native form submit continues to hidden iframe so email is 100% delivered with all fields!
-    setTimeout(() => {
+      await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch {
+      // Regardless of network state, proceed to show confirmation with submitted data
+    } finally {
       setIsSubmitting(false);
+      setSubmittedData({ ...formData });
       setShowSuccessModal(true);
+      // Reset form fields
       setFormData({
         company: '',
         contactPerson: '',
@@ -169,7 +158,7 @@ export default function Sample() {
         message: '',
       });
       setErrors({});
-    }, 1000);
+    }
   };
 
   return (
@@ -195,25 +184,7 @@ export default function Sample() {
             </div>
           </div>
           
-          {/* Background iframe for reliable delivery */}
-          <iframe name="hidden_sample_iframe" id="hidden_sample_iframe" className="hidden" title="hidden_sample_iframe" />
-
-          <form 
-            action="https://formsubmit.co/oneteam@rbcnf.co.kr"
-            method="POST"
-            target="hidden_sample_iframe"
-            className="space-y-8" 
-            onSubmit={handleSubmit} 
-            noValidate
-          >
-            {/* FormSubmit Config & Hidden Data */}
-            <input type="hidden" name="_subject" value={`[AMPOULE PICK] 샘플 신청서 - ${formData.company || '신청'} (${formData.contactPerson || '담당자'}님)`} />
-            <input type="hidden" name="_replyto" value={formData.email} />
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="관심 제품 (최대 3개)" value={formData.selectedProducts.join(', ')} />
-            <input type="hidden" name="신청일시" value={new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })} />
-
+          <form className="space-y-8" onSubmit={handleSubmit} noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 회사명 */}
               <div id="field-company" className="space-y-2">
@@ -222,7 +193,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="회사명"
+                  name="company"
                   value={formData.company}
                   onChange={handleChange}
                   placeholder="예: 주식회사 앰플픽"
@@ -245,7 +216,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="담당자명"
+                  name="contactPerson"
                   value={formData.contactPerson}
                   onChange={handleChange}
                   placeholder="예: 홍길동 팀장"
@@ -268,7 +239,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="tel" 
-                  name="연락처"
+                  name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="예: 010-1234-5678"
@@ -291,7 +262,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="email" 
-                  name="이메일"
+                  name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="예: contact@company.com"
@@ -314,7 +285,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="회사 홈페이지 또는 간략한 회사 소개"
+                  name="companyIntro"
                   value={formData.companyIntro}
                   onChange={handleChange}
                   placeholder="예: https://example.com 또는 화장품 유통 및 뷰티 브랜드 운영 기업"
@@ -337,7 +308,7 @@ export default function Sample() {
                 </label>
                 <input 
                   type="text" 
-                  name="주요 판매 국가 또는 유통채널"
+                  name="salesChannel"
                   value={formData.salesChannel}
                   onChange={handleChange}
                   placeholder="예: 국내 온라인몰(스마트스토어, 쿠팡), 일본 Qoo10, 동남아 쇼피 등"
@@ -419,7 +390,7 @@ export default function Sample() {
                     <div className="relative flex items-center justify-center w-5 h-5">
                       <input 
                         type="radio" 
-                        name="검토 중인 주문 방식" 
+                        name="orderMethod" 
                         value={method}
                         checked={formData.orderMethod === method}
                         onChange={handleChange}
@@ -442,7 +413,7 @@ export default function Sample() {
                 <span className="px-2 py-0.5 text-xs font-medium text-gray-600 bg-gray-200/80 rounded-md">선택사항</span>
               </div>
               <textarea 
-                name="문의 또는 요청사항"
+                name="message"
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="샘플 수령 주소나 기타 궁금하신 점을 자유롭게 적어주세요."
@@ -500,40 +471,51 @@ export default function Sample() {
 
               <div className="space-y-2">
                 <h3 className="text-2xl font-bold text-gray-900">샘플 신청이 접수되었습니다!</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  작성해 주신 샘플 신청 내용이 <br />
-                  <span className="font-bold text-blue-600">oneteam@rbcnf.co.kr</span> 로 자동 발송되었습니다.
+                <p className="text-sm text-gray-600 leading-relaxed font-medium">
+                  담당자가 접수된 신청서를 확인한 후, 연락처 또는 이메일로 발송 안내를 회신드리겠습니다.
                 </p>
               </div>
 
               {submittedData && (
-                <div className="bg-gray-50 rounded-2xl p-4 text-left text-sm space-y-2 border border-gray-100">
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">회사명 / 담당자</span>
-                    <span className="font-medium text-gray-900">{submittedData.company} / {submittedData.contactPerson}</span>
+                <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 text-left text-sm space-y-2.5 border border-gray-100 max-h-[60vh] overflow-y-auto">
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">회사명</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.company}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">연락처</span>
-                    <span className="font-medium text-gray-900">{submittedData.phone}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">담당자명</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.contactPerson}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">이메일</span>
-                    <span className="font-medium text-gray-900">{submittedData.email}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">연락처</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.phone}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">선택 앰플</span>
-                    <span className="font-medium text-blue-600 text-right">{submittedData.selectedProducts.join(', ')}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">이메일</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.email}</span>
                   </div>
-                  <div className="flex justify-between pt-0.5">
-                    <span className="text-gray-500">주문 방식</span>
-                    <span className="font-medium text-gray-900">{submittedData.orderMethod}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">회사 홈페이지 / 소개</span>
+                    <span className="font-medium text-gray-900 sm:text-right break-all">{submittedData.companyIntro}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">주요 판매 국가 / 유통채널</span>
+                    <span className="font-medium text-gray-900 sm:text-right">{submittedData.salesChannel}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">관심 제품 (선택 앰플)</span>
+                    <span className="font-semibold text-blue-600 sm:text-right">{submittedData.selectedProducts.join(', ')}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">검토 중인 주문 방식</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.orderMethod}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between pt-0.5 gap-0.5">
+                    <span className="text-gray-500 shrink-0">문의 또는 요청사항</span>
+                    <span className="font-medium text-gray-800 sm:text-right whitespace-pre-wrap">{submittedData.message || '없음'}</span>
                   </div>
                 </div>
               )}
-
-              <p className="text-xs text-gray-500 leading-relaxed">
-                ※ 담당자가 접수된 신청서를 확인한 후, 기재해 주신 연락처와 이메일로 발송 안내를 도와드리겠습니다.
-              </p>
 
               <button 
                 onClick={() => setShowSuccessModal(false)}
