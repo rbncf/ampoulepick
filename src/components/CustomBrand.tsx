@@ -143,7 +143,7 @@ export default function CustomBrand() {
         {/* Templates */}
         <div className="space-y-12 pt-12 border-t border-gray-100">
           <div className="text-center space-y-6 max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-gray-900 tracking-tight">고객님 브랜드 디자인 선택만 하면 됩니다</h2>
+            <h2 className="text-4xl font-bold text-gray-900 tracking-tight">고객님의 브랜드, 디자인 선택만 하면 됩니다</h2>
             <p className="text-lg text-gray-600 leading-relaxed">
               준비된 5가지 디자인 템플릿 중 원하는 디자인을 선택하고, 브랜드 로고와 원하는 색상을 전달해 주시면 고객님의 브랜드에 맞춰 디자인 시안을 제작해 드립니다.
             </p>
