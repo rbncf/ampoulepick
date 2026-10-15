@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { products } from '../data';
-import { CheckCircle2, AlertCircle, Loader2, Send } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Loader2, Send, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Sample() {
@@ -131,16 +131,33 @@ export default function Sample() {
         '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
       };
 
-      await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch {
-      // Regardless of network state, proceed to show confirmation with submitted data
+      let sentSuccess = false;
+      try {
+        const proxyRes = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (proxyRes.ok) {
+          const resData = await proxyRes.json();
+          if (resData.success === 'true' || resData.success === true) {
+            sentSuccess = true;
+          }
+        }
+      } catch {
+        // Fallback below
+      }
+
+      if (!sentSuccess) {
+        await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }).catch(() => {});
+      }
     } finally {
       setIsSubmitting(false);
       setSubmittedData({ ...formData });
@@ -517,12 +534,34 @@ export default function Sample() {
                 </div>
               )}
 
-              <button 
-                onClick={() => setShowSuccessModal(false)}
-                className="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                확인
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                <a
+                  href={`mailto:oneteam@rbcnf.co.kr?subject=${encodeURIComponent(
+                    `[AMPOULE PICK] 샘플 신청서 - ${submittedData?.company || ''} (${submittedData?.contactPerson || ''})`
+                  )}&body=${encodeURIComponent(
+                    `[AMPOULE PICK 샘플 신청서]\n\n` +
+                    `1. 회사명: ${submittedData?.company || ''}\n` +
+                    `2. 담당자명: ${submittedData?.contactPerson || ''}\n` +
+                    `3. 연락처: ${submittedData?.phone || ''}\n` +
+                    `4. 이메일: ${submittedData?.email || ''}\n` +
+                    `5. 회사 홈페이지/소개: ${submittedData?.companyIntro || ''}\n` +
+                    `6. 주요 판매국가/유통채널: ${submittedData?.salesChannel || ''}\n` +
+                    `7. 관심 제품: ${submittedData?.selectedProducts.join(', ') || ''}\n` +
+                    `8. 주문 방식: ${submittedData?.orderMethod || ''}\n` +
+                    `9. 문의 및 요청사항: ${submittedData?.message || '없음'}\n`
+                  )}`}
+                  className="w-full sm:w-1/2 py-3.5 px-3 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 border border-blue-200"
+                >
+                  <Mail className="w-4 h-4 shrink-0" />
+                  <span>이메일 앱으로 직접 발송</span>
+                </a>
+                <button 
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full sm:w-1/2 py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors cursor-pointer text-sm"
+                >
+                  확인
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
