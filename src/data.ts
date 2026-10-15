@@ -9,6 +9,8 @@ export const products = {
       moq: '3,000개',
       image: '/images/리뉴얼 퍼밍 앰플.png',
       fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%A6%AC%EB%89%B4%EC%96%BC%20%ED%8D%BC%EB%B0%8D%20%EC%95%B0%ED%94%8C.png',
+      detailImage: '/images/4-리뉴얼.png',
+      detailFallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/4-%EB%A6%AC%EB%89%B4%EC%96%BC.png',
     },
     {
       id: 'tf2',
@@ -19,6 +21,8 @@ export const products = {
       moq: '3,000개',
       image: '/images/래디언스 브라이트 앰플.png',
       fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EB%9E%98%EB%94%94%EC%96%B8%EC%8A%A4%20%EB%B8%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8%20%EC%95%B0%ED%94%8C.png',
+      detailImage: '/images/2-래디언스.png',
+      detailFallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/2-%EB%9E%98%EB%94%94%EC%96%B8%EC%8A%A4.png',
     },
     {
       id: 'tf3',
@@ -29,6 +33,8 @@ export const products = {
       moq: '3,000개',
       image: '/images/하이드레이션 밸런스 앰플 (사이즈변경).png',
       fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%ED%95%98%EC%9D%B4%EB%93%9C%EB%A0%88%EC%9D%B4%EC%85%98%20%EB%B0%B8%EB%9F%B0%EC%8A%A4%20%EC%95%B0%ED%94%8C%20(%EC%82%AC%EC%9D%B4%EC%A6%88%EB%B3%80%EA%B2%BD).png',
+      detailImage: '/images/1-하이드레이션.png',
+      detailFallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/1-%ED%95%98%EC%9D%B4%EB%93%9C%EB%A0%88%EC%9D%B4%EC%85%98.png',
     },
     {
       id: 'tf4',
@@ -39,6 +45,8 @@ export const products = {
       moq: '3,000개',
       image: '/images/인텐시브 배리어 앰플 (사이즈변경).png',
       fallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/%EC%9D%B8%ED%85%90%EC%8B%9C%EB%B8%8C%20%EB%B0%B0%EB%A6%AC%EC%96%B4%20%EC%95%B0%ED%94%8C%20(%EC%82%AC%EC%9D%B4%EC%A6%88%EB%B3%80%EA%B2%BD).png',
+      detailImage: '/images/3-인텐시브.png',
+      detailFallbackImage: 'https://rbcnf.cafe24.com/ampoulepick/3-%EC%9D%B8%ED%85%90%EC%8B%9C%EB%B8%8C.png',
     },
   ],
   highEfficacy: [
