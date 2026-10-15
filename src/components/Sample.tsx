@@ -346,7 +346,6 @@ export default function Sample() {
                   return (
                     <label 
                       key={p.id} 
-                      onClick={() => handleProductToggle(p.name)}
                       className={`flex items-center gap-3 p-2 rounded-xl transition-all select-none ${
                         isMaxReached 
                           ? 'opacity-40 cursor-not-allowed' 
@@ -358,8 +357,8 @@ export default function Sample() {
                           type="checkbox" 
                           checked={isChecked}
                           disabled={isMaxReached}
-                          onChange={() => {}}
-                          className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 checked:bg-blue-600 checked:border-blue-600 transition-colors pointer-events-none" 
+                          onChange={() => handleProductToggle(p.name)}
+                          className="peer appearance-none w-5 h-5 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 checked:bg-blue-600 checked:border-blue-600 transition-colors cursor-pointer" 
                         />
                         <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
