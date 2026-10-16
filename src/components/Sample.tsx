@@ -20,6 +20,9 @@ export default function Sample() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [inquiryId, setInquiryId] = useState<string>('');
+  const [honeypot, setHoneypot] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedData, setSubmittedData] = useState<typeof formData | null>(null);
 
@@ -112,57 +115,44 @@ export default function Sample() {
     }
 
     setIsSubmitting(true);
+    setSubmitError(null);
 
     try {
-      const payload = {
-        _subject: `[AMPOULE PICK] 샘플 신청서 - ${formData.company} (${formData.contactPerson}님)`,
-        _replyto: formData.email,
-        _template: 'table',
-        _captcha: 'false',
-        '회사명': formData.company,
-        '담당자명': formData.contactPerson,
-        '연락처': formData.phone,
-        '이메일': formData.email,
-        '회사 홈페이지 또는 소개': formData.companyIntro,
-        '주요 판매 국가 및 유통채널': formData.salesChannel,
-        '관심 제품 (최대 3개)': formData.selectedProducts.join(', '),
-        '검토 중인 주문 방식': formData.orderMethod,
-        '문의 또는 요청사항': formData.message || '없음',
-        '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
-      };
+      const response = await fetch('/api/submit-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          inquiryType: 'sample',
+          company: formData.company,
+          contactPerson: formData.contactPerson,
+          phone: formData.phone,
+          email: formData.email,
+          companyIntro: formData.companyIntro,
+          salesChannel: formData.salesChannel,
+          selectedProducts: formData.selectedProducts,
+          orderMethod: formData.orderMethod,
+          message: formData.message,
+          hp_field: honeypot
+        })
+      });
 
-      let sentSuccess = false;
-      try {
-        const proxyRes = await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (proxyRes.ok) {
-          const resData = await proxyRes.json();
-          if (resData.success === 'true' || resData.success === true) {
-            sentSuccess = true;
-          }
-        }
-      } catch {
-        // Fallback below
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result || result.success !== true) {
+        const errorMsg = result?.error || '샘플 신청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+        setSubmitError(errorMsg);
+        return;
       }
 
-      if (!sentSuccess) {
-        await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        }).catch(() => {});
-      }
-    } finally {
-      setIsSubmitting(false);
+      // 실제 성공 응답을 확인한 경우에만 성공 상태 및 모달 표시
+      setInquiryId(result.inquiryId || '');
       setSubmittedData({ ...formData });
       setShowSuccessModal(true);
-      // Reset form fields
+
+      // 성공 시 폼 초기화
       setFormData({
         company: '',
         contactPerson: '',
@@ -175,6 +165,12 @@ export default function Sample() {
         message: '',
       });
       setErrors({});
+      setSubmitError(null);
+
+    } catch (err: any) {
+      setSubmitError('네트워크 연결 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -202,6 +198,17 @@ export default function Sample() {
           </div>
           
           <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+            {/* Honeypot field for bot protection */}
+            <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+              <input 
+                type="text" 
+                name="hp_field" 
+                value={honeypot} 
+                onChange={(e) => setHoneypot(e.target.value)} 
+                tabIndex={-1} 
+                autoComplete="off" 
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 회사명 */}
               <div id="field-company" className="space-y-2">
@@ -440,6 +447,17 @@ export default function Sample() {
 
             {/* 제출 버튼 */}
             <div className="pt-4 flex flex-col items-center gap-4">
+              {/* 제출 에러 메시지 배너 */}
+              {submitError && (
+                <div className="w-full max-w-xl p-4 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3 text-red-700 text-sm">
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-semibold">신청 처리 실패</p>
+                    <p className="text-red-600">{submitError}</p>
+                  </div>
+                </div>
+              )}
+
               <button 
                 type="submit" 
                 disabled={isSubmitting}

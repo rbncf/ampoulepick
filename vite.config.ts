@@ -12,38 +12,82 @@ export default defineConfig(() => {
       react(), 
       tailwindcss(),
       {
-        name: 'email-api-proxy',
+        name: 'inquiry-api-proxy',
         configureServer(server) {
-          server.middlewares.use('/api/send-email', (req, res) => {
+          server.middlewares.use('/api/submit-inquiry', (req, res) => {
             if (req.method === 'POST') {
               let body = '';
               req.on('data', (chunk) => {
                 body += chunk;
               });
               req.on('end', async () => {
+                res.setHeader('Content-Type', 'application/json; charset=utf-8');
                 try {
-                  const payload = JSON.parse(body || '{}');
-                  const origin = req.headers.origin || 'https://ais-dev-jr4hduc7ogoqct57ge7okt-170946579933.asia-northeast1.run.app';
-                  const referer = req.headers.referer || `${origin}/`;
-                  const fetchRes = await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                      'Origin': String(origin),
-                      'Referer': String(referer),
-                      'User-Agent': (req.headers['user-agent'] as string) || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-                    },
-                    body: JSON.stringify(payload),
-                  });
-                  const result = await fetchRes.json().catch(() => ({ success: true }));
-                  res.setHeader('Content-Type', 'application/json');
-                  res.statusCode = 200;
-                  res.end(JSON.stringify(result));
+                  const data = JSON.parse(body || '{}');
+                  const { inquiryType, company, contactPerson, phone, email, selectedProducts, companyIntro, salesChannel, orderMethod, message, hp_field, _botCheck } = data;
+
+                  // Spam honeypot
+                  if (hp_field || _botCheck) {
+                    res.statusCode = 400;
+                    return res.end(JSON.stringify({ success: false, error: '스팸 방지 필터에 의해 요청이 거부되었습니다.' }));
+                  }
+
+                  // Basic input validation in dev
+                  if (!inquiryType || (inquiryType !== 'sample' && inquiryType !== 'business')) {
+                    res.statusCode = 400;
+                    return res.end(JSON.stringify({ success: false, error: '유효한 inquiryType(sample 또는 business)을 전달해 주세요.' }));
+                  }
+                  if (!company || !contactPerson || !phone || !email) {
+                    res.statusCode = 400;
+                    return res.end(JSON.stringify({ success: false, error: '필수 항목(회사명, 담당자명, 연락처, 이메일)을 입력해 주세요.' }));
+                  }
+                  if (inquiryType === 'sample') {
+                    if (!companyIntro || !salesChannel || !orderMethod) {
+                      res.statusCode = 400;
+                      return res.end(JSON.stringify({ success: false, error: '샘플 신청 필수 항목(회사 소개, 유통채널, 주문 방식)을 입력해 주세요.' }));
+                    }
+                    if (Array.isArray(selectedProducts) && selectedProducts.length > 3) {
+                      res.statusCode = 400;
+                      return res.end(JSON.stringify({ success: false, error: '샘플 신청 관심 제품은 최대 3개까지만 선택 가능합니다.' }));
+                    }
+                  } else {
+                    if (!message || !message.trim()) {
+                      res.statusCode = 400;
+                      return res.end(JSON.stringify({ success: false, error: '문의내용을 입력해 주세요.' }));
+                    }
+                  }
+
+                  const appsScriptUrl = process.env.APPS_SCRIPT_URL;
+                  const appsScriptSecret = process.env.APPS_SCRIPT_SECRET || '';
+
+                  if (appsScriptUrl) {
+                    // Forward to actual Google Apps Script
+                    const scriptPayload = { ...data, secret: appsScriptSecret };
+                    const scriptRes = await fetch(appsScriptUrl, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                      body: JSON.stringify(scriptPayload),
+                    });
+                    const scriptJson = await scriptRes.json().catch(() => ({ success: false, error: 'Apps Script 응답 파싱 실패' }));
+                    res.statusCode = scriptRes.ok ? 200 : 502;
+                    return res.end(JSON.stringify(scriptJson));
+                  } else {
+                    // Local simulated success when APPS_SCRIPT_URL is not set
+                    const prefix = inquiryType === 'sample' ? 'SMP' : 'BIZ';
+                    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                    const mockId = `${prefix}-${dateStr}-${Math.floor(1000 + Math.random() * 9000)}`;
+                    res.statusCode = 200;
+                    return res.end(JSON.stringify({
+                      success: true,
+                      inquiryId: mockId,
+                      emailSent: false,
+                      devMode: true,
+                      message: '정상적으로 접수되었습니다. (로컬 개발 환경)'
+                    }));
+                  }
                 } catch (err: any) {
-                  res.setHeader('Content-Type', 'application/json');
                   res.statusCode = 500;
-                  res.end(JSON.stringify({ success: false, error: err?.message || 'Failed to dispatch' }));
+                  res.end(JSON.stringify({ success: false, error: err?.message || '서버 오류가 발생했습니다.' }));
                 }
               });
             } else {

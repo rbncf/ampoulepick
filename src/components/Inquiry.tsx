@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { products } from '../data';
-import { CheckCircle2, AlertCircle, Loader2, Send } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Loader2, Send, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function Inquiry() {
@@ -20,6 +20,9 @@ export default function Inquiry() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [inquiryId, setInquiryId] = useState<string>('');
+  const [honeypot, setHoneypot] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedData, setSubmittedData] = useState<typeof formData | null>(null);
 
@@ -58,6 +61,9 @@ export default function Inquiry() {
         return next;
       });
     }
+    if (submitError) {
+      setSubmitError(null);
+    }
   };
 
   const handleProductToggle = (productName: string) => {
@@ -85,39 +91,44 @@ export default function Inquiry() {
     }
 
     setIsSubmitting(true);
+    setSubmitError(null);
 
     try {
-      const payload = {
-        _subject: `[AMPOULE PICK] 거래 문의 - ${formData.company} (${formData.contactPerson}님)`,
-        _replyto: formData.email,
-        _template: 'table',
-        _captcha: 'false',
-        '회사명': formData.company,
-        '담당자명': formData.contactPerson,
-        '연락처': formData.phone,
-        '이메일': formData.email,
-        '회사 홈페이지 또는 소개': formData.companyIntro || '미기재',
-        '주요 판매 국가/유통채널': formData.salesChannel || '미기재',
-        '관심 제품': formData.selectedProducts.length > 0 ? formData.selectedProducts.join(', ') : '선택 안 함',
-        '검토 중인 주문 방식': formData.orderMethod || '미선택',
-        '문의내용': formData.message,
-        '신청일시': new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
-      };
-
-      await fetch('https://formsubmit.co/ajax/oneteam@rbcnf.co.kr', {
+      const response = await fetch('/api/submit-inquiry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          inquiryType: 'business',
+          company: formData.company,
+          contactPerson: formData.contactPerson,
+          phone: formData.phone,
+          email: formData.email,
+          companyIntro: formData.companyIntro,
+          salesChannel: formData.salesChannel,
+          selectedProducts: formData.selectedProducts,
+          orderMethod: formData.orderMethod,
+          message: formData.message,
+          hp_field: honeypot
+        })
       });
-    } catch {
-      // Regardless of network state, proceed to show confirmation with submitted data
-    } finally {
-      setIsSubmitting(false);
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result || result.success !== true) {
+        const errorMsg = result?.error || '거래 문의 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+        setSubmitError(errorMsg);
+        return;
+      }
+
+      // 실제 성공 응답을 확인한 경우에만 성공 상태 및 모달 표시
+      setInquiryId(result.inquiryId || '');
       setSubmittedData({ ...formData });
       setShowSuccessModal(true);
+
+      // 성공 시에만 폼 초기화
       setFormData({
         company: '',
         contactPerson: '',
@@ -130,6 +141,12 @@ export default function Inquiry() {
         message: '',
       });
       setErrors({});
+      setSubmitError(null);
+
+    } catch (err: any) {
+      setSubmitError('네트워크 연결 오류가 발생했습니다. 인터넷 연결을 확인하고 다시 시도해 주세요.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -154,6 +171,17 @@ export default function Inquiry() {
           </div>
           
           <form className="space-y-8" onSubmit={handleSubmit} noValidate>
+            {/* Honeypot field for bot protection */}
+            <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+              <input 
+                type="text" 
+                name="hp_field" 
+                value={honeypot} 
+                onChange={(e) => setHoneypot(e.target.value)} 
+                tabIndex={-1} 
+                autoComplete="off" 
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* 회사명 */}
               <div id="inquiry-field-company" className="space-y-2">
@@ -363,6 +391,17 @@ export default function Inquiry() {
 
             {/* 제출 버튼 */}
             <div className="pt-4 flex flex-col items-center gap-4">
+              {/* 제출 에러 메시지 배너 */}
+              {submitError && (
+                <div className="w-full max-w-xl p-4 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3 text-red-700 text-sm">
+                  <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-semibold">문의 접수 실패</p>
+                    <p className="text-red-600">{submitError}</p>
+                  </div>
+                </div>
+              )}
+
               <button 
                 type="submit" 
                 disabled={isSubmitting}
@@ -371,7 +410,7 @@ export default function Inquiry() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>문의 내용 발송 중...</span>
+                    <span>문의 내용 접수 중...</span>
                   </>
                 ) : (
                   <>
@@ -410,45 +449,82 @@ export default function Inquiry() {
 
               <div className="space-y-2">
                 <h3 className="text-2xl font-bold text-gray-900">거래 문의가 접수되었습니다!</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  작성해 주신 문의 내용이 <br />
-                  <span className="font-bold text-blue-600">oneteam@rbcnf.co.kr</span> 로 자동 발송되었습니다.
+                <p className="text-sm text-gray-600 leading-relaxed font-medium">
+                  담당자가 접수된 신청서를 확인한 후, 연락처 또는 이메일로 발송 안내를 회신드리겠습니다.
                 </p>
               </div>
 
               {submittedData && (
-                <div className="bg-gray-50 rounded-2xl p-4 text-left text-sm space-y-2 border border-gray-100">
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">회사명 / 담당자</span>
-                    <span className="font-medium text-gray-900">{submittedData.company} / {submittedData.contactPerson}</span>
+                <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 text-left text-sm space-y-2.5 border border-gray-100 max-h-[60vh] overflow-y-auto">
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">회사명</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.company}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">연락처</span>
-                    <span className="font-medium text-gray-900">{submittedData.phone}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">담당자명</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.contactPerson}</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-200/60 pb-1.5">
-                    <span className="text-gray-500">이메일</span>
-                    <span className="font-medium text-gray-900">{submittedData.email}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">연락처</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.phone}</span>
                   </div>
-                  <div className="pt-0.5">
-                    <span className="text-gray-500 block mb-1">문의 내용</span>
-                    <p className="font-medium text-gray-800 bg-white p-2.5 rounded-lg border border-gray-200/60 text-xs line-clamp-3">
-                      {submittedData.message}
-                    </p>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">이메일</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.email}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">회사 홈페이지 / 소개</span>
+                    <span className="font-medium text-gray-900 sm:text-right break-all">{submittedData.companyIntro || '미기재'}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">주요 판매 국가 / 유통채널</span>
+                    <span className="font-medium text-gray-900 sm:text-right">{submittedData.salesChannel || '미기재'}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">관심 앰플</span>
+                    <span className="font-semibold text-blue-600 sm:text-right">
+                      {submittedData.selectedProducts.length > 0 ? submittedData.selectedProducts.join(', ') : '선택 안 함'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200/70 pb-2 gap-0.5">
+                    <span className="text-gray-500 shrink-0">검토 중인 주문 방식</span>
+                    <span className="font-semibold text-gray-900 sm:text-right">{submittedData.orderMethod || '미선택'}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between pt-0.5 gap-0.5">
+                    <span className="text-gray-500 shrink-0">문의내용</span>
+                    <span className="font-medium text-gray-800 sm:text-right whitespace-pre-wrap">{submittedData.message}</span>
                   </div>
                 </div>
               )}
 
-              <p className="text-xs text-gray-500 leading-relaxed">
-                ※ 담당자가 접수 내용을 확인한 후 영업일 기준 +2일 이내에 연락 드리겠습니다.
-              </p>
-
-              <button 
-                onClick={() => setShowSuccessModal(false)}
-                className="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                확인
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                <a
+                  href={`mailto:oneteam@rbcnf.co.kr?subject=${encodeURIComponent(
+                    `[AMPOULE PICK] 거래 문의서 - ${submittedData?.company || ''} (${submittedData?.contactPerson || ''})`
+                  )}&body=${encodeURIComponent(
+                    `[AMPOULE PICK 거래 문의서]\n\n` +
+                    `1. 회사명: ${submittedData?.company || ''}\n` +
+                    `2. 담당자명: ${submittedData?.contactPerson || ''}\n` +
+                    `3. 연락처: ${submittedData?.phone || ''}\n` +
+                    `4. 이메일: ${submittedData?.email || ''}\n` +
+                    `5. 회사 홈페이지/소개: ${submittedData?.companyIntro || '미기재'}\n` +
+                    `6. 주요 판매국가/유통채널: ${submittedData?.salesChannel || '미기재'}\n` +
+                    `7. 관심 앰플: ${submittedData?.selectedProducts.length ? submittedData?.selectedProducts.join(', ') : '선택 안 함'}\n` +
+                    `8. 주문 방식: ${submittedData?.orderMethod || '미선택'}\n` +
+                    `9. 문의내용: ${submittedData?.message || ''}\n`
+                  )}`}
+                  className="w-full sm:w-1/2 py-3.5 px-3 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 border border-blue-200"
+                >
+                  <Mail className="w-4 h-4 shrink-0" />
+                  <span>이메일 앱으로 직접 발송</span>
+                </a>
+                <button 
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full sm:w-1/2 py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors cursor-pointer text-sm"
+                >
+                  확인
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
